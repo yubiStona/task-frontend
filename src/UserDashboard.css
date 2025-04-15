@@ -1,0 +1,117 @@
+/* UserDashboard.css */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
+.task-card-container {
+  position: relative;
+}
+
+.task-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  height: 100%;
+  position: relative;
+  background-color: #fff;
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure only the selected card expands */
+.task-card.expanded-card {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Prevent other cards from being affected */
+.col-md-6:not(:has(.expanded-card)) .task-card {
+  /* This ensures other cards stay the same */
+  transform: translateY(0);
+}
+
+.task-expanded-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.completed-task {
+  border-left: 5px solid #198754;
+  opacity: 0.85;
+}
+
+.completed-task:hover {
+  opacity: 1;
+}
+
+.task-dates {
+  font-size: 0.9rem;
+}
+
+.task-status-filters {
+  flex-wrap: wrap;
+}
+
+.task-status-filters .btn {
+  margin-bottom: 10px;
+}
+
+.assigned-by-avatar {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+
+.assigned-by-compact {
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+.due-date {
+  font-weight: 500;
+}
+
+/* Add additional styles to ensure card independence */
+.card-footer {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .task-status-filters .btn {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+
+  .task-card.expanded-card {
+    transform: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+}
