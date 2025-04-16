@@ -20,23 +20,45 @@ import {
   selectIsCsrfInitialized,
   setCsrfToken,
 } from "./features/auth/authSlice";
+import { Container, Spinner } from "react-bootstrap";
 function App() {
   const dispatch = useDispatch();
 
   const initialized = useSelector(selectIsCsrfInitialized);
-  const [trigger, { data, isSuccess }] = useLazyGetCsrfTokenQuery();
+  const [getCsrfToken, { data, isSuccess, isLoading: isCsrfLoading }] =
+    useLazyGetCsrfTokenQuery();
 
   useEffect(() => {
-    if (!initialized) {
-      trigger();
-    }
-  }, [initialized, trigger]);
+    const fetchToken = () => {
+      // Only fetch if not already initialized or loading to avoid redundant calls
+      if (!initialized && !isCsrfLoading) {
+        getCsrfToken();
+      }
+    };
+    fetchToken(); // Initial fetch
+    const refreshInterval = setInterval(fetchToken, 2 * 60 * 1000);
+    return () => clearInterval(refreshInterval);
+  }, [getCsrfToken, initialized, isCsrfLoading]);
 
   useEffect(() => {
     if (isSuccess && data?.csrfToken) {
       dispatch(setCsrfToken(data.csrfToken));
     }
   }, [isSuccess, data, dispatch]);
+
+  // Wait for CSRF initialization before rendering protected routes
+  if (!initialized && isCsrfLoading) {
+    return (
+      <Container
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Container>
+    );
+  }
   return (
     <Routes>
       {/* Public Routes */}

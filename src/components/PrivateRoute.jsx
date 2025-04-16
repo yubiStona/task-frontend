@@ -12,7 +12,7 @@ const PrivateRoute = ({ children, adminOnly = false }) => {
   }
 
   if (adminOnly && !isAdmin) {
-    return <Navigate to="/home" replace />;
+    return <Navigate to="/user-dashboard" replace />;
   }
 
   return children;

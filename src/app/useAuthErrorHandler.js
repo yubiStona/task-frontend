@@ -9,7 +9,12 @@ export const useAuthErrorHandler = (error) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (error?.status === 401) {
+    if (
+      error?.status === 401 &&
+      error.data?.message !== "CSRF token missing" &&
+      error.data?.message !== "Invalid CSRF token" &&
+      !error.originalStatus?.url?.includes("/csrf-token")
+    ) {
       // Just dispatch logout action and redirect
       dispatch(apiSlice.util.resetApiState());
       dispatch(logout());

@@ -38,7 +38,6 @@ const TasksListPage = () => {
 
   useEffect(() => {
     if (!tasks || tasks.length === 0) {
-      setFilteredTasks([]);
       return;
     }
 

@@ -14,13 +14,6 @@ const schema = yup.object().shape({
 import { selectCurrentUser } from "../features/auth/authSlice";
 const LoginPage = () => {
   const user = useSelector(selectCurrentUser);
-  if (user) {
-    if (user.role === "admin") {
-      return <Navigate to="/dashboard" replace />;
-    } else {
-      return <Navigate to="/user-dashboard" replace />;
-    }
-  }
   const {
     register,
     handleSubmit,
@@ -33,6 +26,14 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  if (user) {
+    if (user.role === "admin") {
+      return <Navigate to="/dashboard" replace />;
+    } else {
+      return <Navigate to="/user-dashboard" replace />;
+    }
+  }
+
   const onSubmit = async (data) => {
     try {
       const userData = await login(data).unwrap();
@@ -41,7 +42,8 @@ const LoginPage = () => {
         return navigate("/dashboard");
       }
       return navigate("/user-dashboard");
-    } catch (err) {}
+    } catch (err) {
+    }
   };
 
   return (
